@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
@@ -20,12 +19,13 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void AimAt(FVector WorldLocation, float LaunchSpeed);
+	void AimAt(FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
+	bool GetTrajectory(FVector &OutVelocity, FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
 	void SetTurretReference(UTankTurret* TurretToSet);
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 		
 private:
 	UTankTurret* Turret = nullptr;
 	UTankBarrel* Barrel = nullptr;
-	void MoveBarrel(FVector AimDirection);
+	void MoveTurretAndBarrel(FVector AimDirection);
 };

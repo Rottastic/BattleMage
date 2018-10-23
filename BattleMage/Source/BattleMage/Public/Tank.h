@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
@@ -10,6 +9,7 @@
 class UTankAimingComponent;
 class UTankTurret;
 class UTankBarrel;
+class AProjectile;
 
 
 UCLASS()
@@ -28,18 +28,25 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 public:	
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	
 	void AimAt(FVector TargetLocation);
 
 	UFUNCTION(BlueprintCallable)
 	void SetTurretReference(UTankTurret* TurretToSet);
-
 	UFUNCTION(BlueprintCallable)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
+	UFUNCTION(BlueprintCallable)
+	void Fire();
 	UPROPERTY(EditAnywhere)
-	float ProjectileLaunchSpeed = 5000; // Unsure what value is best
+	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	bool IsFiring = false;
+
+private:
+	UTankBarrel* Barrel = nullptr;
+
+	float ReloadTimeInSeconds = 3.f;
+	double LastFireTime = 0;
 };

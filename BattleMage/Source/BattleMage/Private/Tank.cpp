@@ -4,6 +4,10 @@
 #include "TankAimingComponent.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
+#include "Projectile.h"
+
+#include "Engine/World.h"
+#include "CoreMinimal.h"
 
 
 // Sets default values
@@ -23,16 +27,9 @@ void ATank::BeginPlay()
 	
 }
 
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
 void ATank::AimAt(FVector TargetLocation)
 {
-	TankAimingComponent->AimAt(TargetLocation, ProjectileLaunchSpeed);
+	TankAimingComponent->AimAt(TargetLocation, ProjectileLaunchSpeed, IsFiring);
 }
 void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
@@ -43,5 +40,25 @@ void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	if (!BarrelToSet) { return; }
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
+void ATank::Fire()
+{
+	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (IsReloaded)
+	{
+		auto BarrelComponent = FindComponentByClass<UTankBarrel>();
+		auto BarrelAimDirection = BarrelComponent->GetComponentRotation().Vector();
+
+		// Spawn a Projectile to launch
+		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+		FRotator StartRotation = Barrel->GetSocketRotation(FName("Projectile"));
+		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, StartLocation, StartRotation);
+		IsFiring = true;
+
+		// Launch the Projectile according to Barrel's AimDirection
+		Projectile->LaunchProjectile(ProjectileLaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
+}

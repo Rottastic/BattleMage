@@ -3,6 +3,7 @@
 #include "TankPlayerController.h"
 #include "Tank.h"
 
+#include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
@@ -38,11 +39,9 @@ void ATankPlayerController::AimAtCrosshair()
 	FVector HitLocation;
 	if (GetCrosshairHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Player targeting at: %s"), *HitLocation.ToString());
 		GetControlledTank()->AimAt(HitLocation);
 		return;
 	}
-	//UE_LOG(LogTemp, Warning, TEXT("Player has no target in reach"));
 }
 bool ATankPlayerController::GetCrosshairHitLocation(FVector& OUT HitLocation) const
 {
@@ -50,13 +49,11 @@ bool ATankPlayerController::GetCrosshairHitLocation(FVector& OUT HitLocation) co
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 	FVector2D ScreenLocation = FVector2D((ViewportSizeX * CrosshairXLocation), (ViewportSizeY * CrosshairYLocation));
-	//UE_LOG(LogTemp, Warning, TEXT("Player crosshair at: %s"), *ScreenLocation.ToString());
 
 	// De-project screen position of crosshair to the world direction
 	FVector CrosshairWorldLocation;
 	FVector CrosshairWorldDirection;
 	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CrosshairWorldLocation, CrosshairWorldDirection);
-	//UE_LOG(LogTemp, Warning, TEXT("Player crosshair direction is: %s"), *CrosshairWorldDirection.ToString());
 
 	//TODO
 	// Line trace forward from that location, see what we hit
@@ -66,7 +63,7 @@ bool ATankPlayerController::GetCrosshairHitLocation(FVector& OUT HitLocation) co
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetControlledTank());
 	bool IsTargetInRange = GetWorld()->LineTraceSingleByChannel(HitResult, CrosshairWorldLocation, TraceEnd, ECC_Visibility, TraceParameters);
 	//DrawDebugLine(GetWorld(), CrosshairWorldLocation, TraceEnd, FColor::Blue, false, 1.f, NULL, 10.f); // Visual-aid for trace
-	DrawDebugLine(GetWorld(), HitResult.ImpactPoint, (HitResult.ImpactPoint + FVector(0.f, 0.f, 250.f)), FColor::Blue, false, 1.f, NULL, 10.f); // Visual-aid for target point
+	DrawDebugLine(GetWorld(), HitResult.ImpactPoint, (HitResult.ImpactPoint + FVector(0.f, 0.f, 250.f)), FColor::Blue, false, 0.5f, NULL, 10.f); // Visual-aid for target point
 
 	// Check to see if our trace collided with anything. Return the impact point and success accordingly
 	if (IsTargetInRange)
