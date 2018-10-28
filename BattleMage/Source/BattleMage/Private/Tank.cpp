@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
@@ -18,6 +19,7 @@ ATank::ATank()
 
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 }
 
 // Called when the game starts or when spawned
@@ -49,6 +51,7 @@ void ATank::Fire()
 	if (IsReloaded)
 	{
 		auto BarrelComponent = FindComponentByClass<UTankBarrel>();
+		if (!BarrelComponent) { return; }
 		auto BarrelAimDirection = BarrelComponent->GetComponentRotation().Vector();
 
 		// Spawn a Projectile to launch

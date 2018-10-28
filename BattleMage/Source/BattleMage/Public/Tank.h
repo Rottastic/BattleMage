@@ -7,6 +7,7 @@
 
 // Forward Declaration
 class UTankAimingComponent;
+class UTankMovementComponent;
 class UTankTurret;
 class UTankBarrel;
 class AProjectile;
@@ -26,27 +27,29 @@ protected:
 	virtual void BeginPlay() override;
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+		UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	void AimAt(FVector TargetLocation);
-
 	UFUNCTION(BlueprintCallable)
-	void SetTurretReference(UTankTurret* TurretToSet);
-	UFUNCTION(BlueprintCallable)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable)
-	void Fire();
-	UPROPERTY(EditAnywhere)
-	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AProjectile> ProjectileBlueprint;
-
+		void Fire();
 	bool IsFiring = false;
 
 private:
 	UTankBarrel* Barrel = nullptr;
 
-	float ReloadTimeInSeconds = 3.f;
+	UFUNCTION(BlueprintCallable)
+		void SetTurretReference(UTankTurret* TurretToSet);
+	UFUNCTION(BlueprintCallable)
+		void SetBarrelReference(UTankBarrel* BarrelToSet);
+
+	UPROPERTY(EditDefaultsOnly)
+		float ProjectileLaunchSpeed = 3000; // Unsure what value is best
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly)
+		float ReloadTimeInSeconds = 3.f;
 	double LastFireTime = 0;
 };

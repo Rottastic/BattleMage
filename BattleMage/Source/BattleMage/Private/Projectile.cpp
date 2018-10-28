@@ -33,8 +33,8 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::LaunchProjectile(float LaunchSpeed)
 {
 	//ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
-	ProjectileMovementComponent->bShouldBounce = true;
+	ProjectileMovementComponent->bShouldBounce = false;
 	ProjectileMovementComponent->Velocity = GetActorRotation().Vector().GetSafeNormal() * LaunchSpeed;
-	ProjectileMovementComponent->UpdateComponentVelocity();
+	//ProjectileMovementComponent->UpdateComponentVelocity();
 	ProjectileMovementComponent->Activate();
 }
