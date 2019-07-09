@@ -10,19 +10,32 @@ class UTankTurret;
 class UTankBarrel;
 
 
+// Enum for aiming state
+UENUM()
+enum class EAimingState : uint8
+{
+	Locked,
+	Aiming,
+	Reloading
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLEMAGE_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UTankAimingComponent();
+	UFUNCTION(BlueprintCallable)
+	void InitialiseComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
 
 	void AimAt(FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
 	bool GetTrajectory(FVector &OutVelocity, FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
-	void SetTurretReference(UTankTurret* TurretToSet);
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	//void SetTurretReference(UTankTurret* TurretToSet);
+	//void SetBarrelReference(UTankBarrel* BarrelToSet);
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	EAimingState AimingState = EAimingState::Aiming;
 		
 private:
 	UTankTurret* Turret = nullptr;

@@ -20,4 +20,7 @@ class BATTLEMAGE_API ATankAIController : public AAIController
 	private:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
+
+		// How close tank gets to target, before halting
+		float AcceptanceRadius = 3000;
 };

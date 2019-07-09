@@ -18,22 +18,18 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
-}
-
-// Called when the game starts or when spawned
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-	
+	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	//TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 }
 
 void ATank::AimAt(FVector TargetLocation)
 {
-	TankAimingComponent->AimAt(TargetLocation, ProjectileLaunchSpeed, IsFiring);
+	//AimingComponent = FindComponentByClass<UTankAimingComponent>();
+	if (!AimingComponent || !Barrel) { return; }
+
+	AimingComponent->AimAt(TargetLocation, ProjectileLaunchSpeed, IsFiring);
 }
-void ATank::SetTurretReference(UTankTurret* TurretToSet)
+/*void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
 	if (!TurretToSet) { return; }
 	TankAimingComponent->SetTurretReference(TurretToSet);
@@ -43,16 +39,17 @@ void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 	if (!BarrelToSet) { return; }
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
 	Barrel = BarrelToSet;
-}
+}*/
 
 void ATank::Fire()
 {
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 	if (IsReloaded)
 	{
-		auto BarrelComponent = FindComponentByClass<UTankBarrel>();
+		UTankBarrel* BarrelComponent = FindComponentByClass<UTankBarrel>();
 		if (!BarrelComponent) { return; }
 		auto BarrelAimDirection = BarrelComponent->GetComponentRotation().Vector();
+		Barrel = BarrelComponent;
 
 		// Spawn a Projectile to launch
 		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));

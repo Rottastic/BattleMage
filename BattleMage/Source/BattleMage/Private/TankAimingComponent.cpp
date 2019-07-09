@@ -10,33 +10,25 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 
-
-// Sets default values for this component's properties
-UTankAimingComponent::UTankAimingComponent()
+void UTankAimingComponent::InitialiseComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	Turret = TurretToSet;
+	Barrel = BarrelToSet;
 }
 
-
-void UTankAimingComponent::AimAt(FVector WorldLocation, float LaunchSpeed, bool DrawDebug)
+/*void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
 {
-	if (!Barrel) { return; }
-
-	FVector OutLaunchVelocity(0);
-	bool IsHitPossible = GetTrajectory(OutLaunchVelocity, WorldLocation, LaunchSpeed, DrawDebug);
-	if (DrawDebug) { Cast<ATank>(GetOwner())->IsFiring = false; }
-
-	// Move the Tank&Barrel towards the target trajectory
-	if (IsHitPossible)
-	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveTurretAndBarrel(AimDirection);
-	}
+	Turret = TurretToSet;
 }
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+{
+	Barrel = BarrelToSet;
+}*/
+
+
 bool UTankAimingComponent::GetTrajectory(FVector &OutVelocity, FVector WorldLocation, float LaunchSpeed, bool DrawDebug)
 {
+	if (!Barrel) { return nullptr; }
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	TArray<AActor*> ActorToIgnore;
 	ActorToIgnore.Add(Barrel->GetOwner());
@@ -60,16 +52,31 @@ bool UTankAimingComponent::GetTrajectory(FVector &OutVelocity, FVector WorldLoca
 
 	return IsHitPossible;
 }
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+void UTankAimingComponent::AimAt(FVector WorldLocation, float LaunchSpeed, bool DrawDebug)
 {
-	Turret = TurretToSet;
-}
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	Barrel = BarrelToSet;
+	if (!Barrel) { return; }
+
+	FVector OutLaunchVelocity(0);
+	bool IsHitPossible = GetTrajectory(OutLaunchVelocity, WorldLocation, LaunchSpeed, DrawDebug);
+	if (DrawDebug) { Cast<ATank>(GetOwner())->IsFiring = false; }
+
+	// Move the Tank&Barrel towards the target trajectory
+	if (IsHitPossible)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveTurretAndBarrel(AimDirection);
+	}
+	else if(!IsHitPossible)
+	{
+		auto AimDirection = WorldLocation.GetSafeNormal();
+		//AimDirection.Z = 30.f;
+		MoveTurretAndBarrel(AimDirection);
+	}
 }
 void UTankAimingComponent::MoveTurretAndBarrel(FVector AimDirection)
 {
+	if (!Barrel || !Turret) { return; }
+
 	// Figure out the difference between desired AimDirection and tank's current rotations
 	auto AimAsRotator = AimDirection.Rotation();
 

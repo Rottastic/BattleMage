@@ -15,7 +15,8 @@ class BATTLEMAGE_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	public:
+	protected:
+		UFUNCTION(BlueprintCallable)
 		ATank* GetControlledTank() const;
 
 	private:

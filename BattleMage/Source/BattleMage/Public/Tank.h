@@ -23,33 +23,31 @@ public:
 	ATank();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UTankAimingComponent* TankAimingComponent = nullptr;
 	UPROPERTY(BlueprintReadOnly)
-		UTankMovementComponent* TankMovementComponent = nullptr;
+	UTankAimingComponent* AimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	void AimAt(FVector TargetLocation);
 	UFUNCTION(BlueprintCallable)
-		void Fire();
+	void Fire();
 	bool IsFiring = false;
 
 private:
 	UTankBarrel* Barrel = nullptr;
 
-	UFUNCTION(BlueprintCallable)
+	/*UFUNCTION(BlueprintCallable)
 		void SetTurretReference(UTankTurret* TurretToSet);
 	UFUNCTION(BlueprintCallable)
-		void SetBarrelReference(UTankBarrel* BarrelToSet);
+		void SetBarrelReference(UTankBarrel* BarrelToSet);*/
 
 	UPROPERTY(EditDefaultsOnly)
-		float ProjectileLaunchSpeed = 3000; // Unsure what value is best
+	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<AProjectile> ProjectileBlueprint;
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(EditDefaultsOnly)
-		float ReloadTimeInSeconds = 3.f;
+	float ReloadTimeInSeconds = 3.f;
 	double LastFireTime = 0;
 };
