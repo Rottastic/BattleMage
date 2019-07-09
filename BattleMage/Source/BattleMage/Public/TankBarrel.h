@@ -24,6 +24,4 @@ private:
 	float MaxElevationDegrees = 25.f;
 	UPROPERTY(EditDefaultsOnly)
 	float MinElevationDegrees = 0.f;
-
-	//prevent self-collision
 };

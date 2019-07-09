@@ -21,6 +21,7 @@ class BATTLEMAGE_API UTankMovementComponent : public UNavMovementComponent
 public:
 	UFUNCTION(BlueprintCallable)
 	void InitialiseComponent(UTankTrack * LeftTrackToSet, UTankTrack * RightTrackToSet);
+
 	UFUNCTION(BlueprintCallable)
 	void IntendMoveForward(float Throw);
 	UFUNCTION(BlueprintCallable)

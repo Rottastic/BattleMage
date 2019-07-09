@@ -7,6 +7,7 @@
 
 // Forward Declaration
 class ATank;
+class UTankAimingComponent;
 
 
 /**
@@ -22,5 +23,9 @@ class BATTLEMAGE_API ATankAIController : public AAIController
 		virtual void Tick(float DeltaTime) override;
 
 		// How close tank gets to target, before halting
-		float AcceptanceRadius = 3000;
+		float AcceptanceRadius = 2500;
+
+		ATank* ControlledTank = nullptr;
+		ATank* PlayerTank = nullptr;
+		UTankAimingComponent* AimingComponent = nullptr;
 };

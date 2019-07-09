@@ -6,6 +6,7 @@
 
 // Forward Declaration
 class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -19,15 +20,19 @@ class BATTLEMAGE_API ATankPlayerController : public APlayerController
 		UFUNCTION(BlueprintCallable)
 		ATank* GetControlledTank() const;
 
+		UFUNCTION(BlueprintImplementableEvent)
+		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
 	private:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
 
 		UPROPERTY(EditDefaultsOnly)
-			float CrosshairXLocation = 0.5f;
+		float CrosshairXLocation = 0.5f;
 		UPROPERTY(EditDefaultsOnly)
-			float CrosshairYLocation = 0.33333f;
+		float CrosshairYLocation = 0.33333f;
 
 		bool GetCrosshairHitLocation(FVector& OUT HitLocation) const;
+		UTankAimingComponent* AimingComponent = nullptr;
 		virtual void AimAtCrosshair();
 };

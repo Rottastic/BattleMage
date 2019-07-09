@@ -9,20 +9,16 @@ void UTankMovementComponent::InitialiseComponent(UTankTrack* LeftTrackToSet, UTa
 	RightTrack = RightTrackToSet;
 }
 
-
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	if (!LeftTrack || !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 
 	RightTrack->SetThrottle(Throw);
 	LeftTrack->SetThrottle(Throw);
 }
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
-	if (!LeftTrack || !RightTrack) { return; }
-
-	/*auto Name = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s throttle: %f"), *Name, Throw)*/
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 
 	RightTrack->SetThrottle(-Throw);
 	LeftTrack->SetThrottle(Throw);

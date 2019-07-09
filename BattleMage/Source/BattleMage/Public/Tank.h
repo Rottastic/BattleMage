@@ -5,13 +5,6 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-// Forward Declaration
-class UTankAimingComponent;
-class UTankMovementComponent;
-class UTankTurret;
-class UTankBarrel;
-class AProjectile;
-
 
 UCLASS()
 class BATTLEMAGE_API ATank : public APawn
@@ -21,33 +14,4 @@ class BATTLEMAGE_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* AimingComponent = nullptr;
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
-
-public:	
-	void AimAt(FVector TargetLocation);
-	UFUNCTION(BlueprintCallable)
-	void Fire();
-	bool IsFiring = false;
-
-private:
-	UTankBarrel* Barrel = nullptr;
-
-	/*UFUNCTION(BlueprintCallable)
-		void SetTurretReference(UTankTurret* TurretToSet);
-	UFUNCTION(BlueprintCallable)
-		void SetBarrelReference(UTankBarrel* BarrelToSet);*/
-
-	UPROPERTY(EditDefaultsOnly)
-	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	UPROPERTY(EditDefaultsOnly)
-	float ReloadTimeInSeconds = 3.f;
-	double LastFireTime = 0;
 };

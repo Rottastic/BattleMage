@@ -8,6 +8,7 @@
 // Forward Declaration
 class UTankTurret;
 class UTankBarrel;
+class AProjectile;
 
 
 // Enum for aiming state
@@ -28,10 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitialiseComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
 
-	void AimAt(FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
+	void AimAt(FVector WorldLocation);
 	bool GetTrajectory(FVector &OutVelocity, FVector WorldLocation, float LaunchSpeed, bool DrawDebug);
-	//void SetTurretReference(UTankTurret* TurretToSet);
-	//void SetBarrelReference(UTankBarrel* BarrelToSet);
+	UFUNCTION(BlueprintCallable)
+	void Fire();
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -41,4 +42,14 @@ private:
 	UTankTurret* Turret = nullptr;
 	UTankBarrel* Barrel = nullptr;
 	void MoveTurretAndBarrel(FVector AimDirection);
+
+	UPROPERTY(EditDefaultsOnly)
+	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ReloadTimeInSeconds = 3.f;
+	double LastFireTime = 0;
+	bool IsFiring = true;
 };
