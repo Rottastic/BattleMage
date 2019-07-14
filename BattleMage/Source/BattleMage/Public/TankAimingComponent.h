@@ -17,7 +17,8 @@ enum class EAimingState : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -34,22 +35,34 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
+	UFUNCTION(BlueprintCallable)
+	EAimingState GetAimingState() const;
+	UFUNCTION(BlueprintCallable)
+	int GetCurrentAmmo() const;
+
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	EAimingState AimingState = EAimingState::Aiming;
+	EAimingState AimingState = EAimingState::Reloading;
 		
 private:
+	UTankAimingComponent();
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 	UTankTurret* Turret = nullptr;
 	UTankBarrel* Barrel = nullptr;
 	void MoveTurretAndBarrel(FVector AimDirection);
 
 	UPROPERTY(EditDefaultsOnly)
-	float ProjectileLaunchSpeed = 3000; // Unsure what value is best
+	float ProjectileLaunchSpeed = 4000; // Unsure what value is best
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	int CurrentAmmo = 3;
 
 	UPROPERTY(EditDefaultsOnly)
 	float ReloadTimeInSeconds = 3.f;
 	double LastFireTime = 0;
-	bool IsFiring = true;
+	bool IsBarrelMoving = false;
+	bool IsReloaded = false;
+	bool IsFiring = false;
 };

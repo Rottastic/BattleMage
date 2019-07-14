@@ -6,7 +6,6 @@
 #include "TankAIController.generated.h"
 
 // Forward Declaration
-class ATank;
 class UTankAimingComponent;
 
 
@@ -25,7 +24,7 @@ class BATTLEMAGE_API ATankAIController : public AAIController
 		// How close tank gets to target, before halting
 		float AcceptanceRadius = 2500;
 
-		ATank* ControlledTank = nullptr;
-		ATank* PlayerTank = nullptr;
+		APawn* ControlledTank = nullptr;
+		APawn* PlayerTank = nullptr;
 		UTankAimingComponent* AimingComponent = nullptr;
 };

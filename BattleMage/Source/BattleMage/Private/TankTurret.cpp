@@ -12,8 +12,22 @@ void UTankTurret::Rotate(float RelativeSpeed)
 	// Rotate the turret horizontally towards the target
 	RelativeSpeed = FMath::Clamp(RelativeSpeed, -1.f, 1.f);
 	auto RotationChange = RelativeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
+	// Temporary fix for the turret/barrel jitters
+	if (RotationChange < 4.f && RotationChange > 1.f)
+	{
+		RotationChange = 1.f;
+	}
+	else if (RotationChange > -4.f && RotationChange < -1.f)
+	{
+		RotationChange = -1.f;
+	}
+	else if (RotationChange >= -1.f && RotationChange <= 1.f)
+	{
+		RotationChange = 0.f;
+	}
 	auto RawNewRotation = RelativeRotation.Yaw + RotationChange;
 	float NewRotation = RawNewRotation;
+
 	SetRelativeRotation(FRotator(0.f, NewRotation, 0.f));
 }
 

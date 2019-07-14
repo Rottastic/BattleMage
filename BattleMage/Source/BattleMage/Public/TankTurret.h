@@ -19,7 +19,7 @@ public:
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-	float MaxDegreesPerSecond = 60.f;
+	float MaxDegreesPerSecond = 120.f; //60
 
 	//prevent self-collision
 };

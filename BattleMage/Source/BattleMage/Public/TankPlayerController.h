@@ -5,7 +5,6 @@
 #include "TankPlayerController.generated.h"
 
 // Forward Declaration
-class ATank;
 class UTankAimingComponent;
 
 /**
@@ -18,7 +17,7 @@ class BATTLEMAGE_API ATankPlayerController : public APlayerController
 	
 	protected:
 		UFUNCTION(BlueprintCallable)
-		ATank* GetControlledTank() const;
+		APawn* GetControlledTank() const;
 
 		UFUNCTION(BlueprintImplementableEvent)
 		void FoundAimingComponent(UTankAimingComponent* AimCompRef);

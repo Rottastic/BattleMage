@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
-#include "Tank.h"
 #include "TankAimingComponent.h"
 
 #include "CoreMinimal.h"
@@ -13,8 +12,8 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent))
 	{
 		FoundAimingComponent(AimingComponent);
@@ -50,7 +49,8 @@ bool ATankPlayerController::GetCrosshairHitLocation(FVector& OUT HitLocation) co
 	// De-project screen position of crosshair to the world direction
 	FVector CrosshairWorldLocation;
 	FVector CrosshairWorldDirection;
-	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CrosshairWorldLocation, CrosshairWorldDirection);
+	bool bWasDeprojectSuccessful = DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CrosshairWorldLocation, CrosshairWorldDirection);
+	if (!bWasDeprojectSuccessful) { return false; }
 
 	// Line trace forward from that location, see what we hit
 	FHitResult HitResult;
@@ -68,7 +68,7 @@ bool ATankPlayerController::GetCrosshairHitLocation(FVector& OUT HitLocation) co
 	}
 	return false;
 }
-ATank* ATankPlayerController::GetControlledTank() const
+APawn* ATankPlayerController::GetControlledTank() const
 {
-	return Cast<ATank>(GetPawn());
+	return GetPawn();
 }
