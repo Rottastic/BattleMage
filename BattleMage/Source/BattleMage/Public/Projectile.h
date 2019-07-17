@@ -7,24 +7,45 @@
 
 //Forward Declaration
 class UProjectileMovementComponent;
+class UStaticMeshComponent;
+class UParticleSystemComponent;
+class URadialForceComponent;
 
 UCLASS()
 class BATTLEMAGE_API AProjectile : public AActor
 {
 	GENERATED_BODY()
 
+public:	
+	void LaunchProjectile(float LaunchSpeed);
+
 protected:
+	// Core projectile components
+	UPROPERTY(BlueprintReadOnly)
+	UStaticMeshComponent* CollisionMesh = nullptr;
+
+private:
+	// Sets default values for this actor's properties
+	AProjectile();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Core projectile components
+	UPROPERTY(VisibleAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
-public:	
-	// Sets default values for this actor's properties
-	AProjectile();
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	// Particle systems
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* LaunchBlast = nullptr;
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ImpactBlast = nullptr;
 
-	
-	void LaunchProjectile(float LaunchSpeed);
+	UPROPERTY(VisibleAnywhere)
+	URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly)
+	float DeathTimerDelay = 3.f;
+
+	UFUNCTION()
+	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 };

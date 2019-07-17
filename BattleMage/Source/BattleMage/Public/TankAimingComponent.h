@@ -38,7 +38,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EAimingState GetAimingState() const;
 	UFUNCTION(BlueprintCallable)
-	int GetCurrentAmmo() const;
+	int32 GetCurrentAmmo() const;
 
 protected:
 	EAimingState AimingState = EAimingState::Reloading;
@@ -53,11 +53,11 @@ private:
 	void MoveTurretAndBarrel(FVector AimDirection);
 
 	UPROPERTY(EditDefaultsOnly)
+	int32 CurrentAmmo = 3;
+	UPROPERTY(EditDefaultsOnly)
 	float ProjectileLaunchSpeed = 4000; // Unsure what value is best
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	int CurrentAmmo = 3;
 
 	UPROPERTY(EditDefaultsOnly)
 	float ReloadTimeInSeconds = 3.f;

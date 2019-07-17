@@ -162,7 +162,7 @@ EAimingState UTankAimingComponent::GetAimingState() const
 {
 	return AimingState;
 }
-int UTankAimingComponent::GetCurrentAmmo() const
+int32 UTankAimingComponent::GetCurrentAmmo() const
 {
 	return CurrentAmmo;
 }
