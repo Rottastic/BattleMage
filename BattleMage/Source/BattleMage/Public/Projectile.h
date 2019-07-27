@@ -45,6 +45,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float DeathTimerDelay = 3.f;
+	UPROPERTY(EditDefaultsOnly)
+	float ProjectileDamage = 10.f;
 
 	UFUNCTION()
 	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);

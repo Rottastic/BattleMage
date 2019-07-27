@@ -3,6 +3,7 @@
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
 // Depends on movement component via pathfinding
+#include "Tank.h"
 
 #include "CoreMinimal.h"
 #include "Engine/World.h"
@@ -20,7 +21,9 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!ensure(ControlledTank && PlayerTank)) { return; }
+	PlayerTank = nullptr;
+	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!(ControlledTank && PlayerTank)) { return; }
 
 	// Move towards the Player
 	MoveToActor(PlayerTank, AcceptanceRadius, true, true, false);
@@ -33,4 +36,23 @@ void ATankAIController::Tick(float DeltaTime)
 	{
 		AimingComponent->Fire();
 	}
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!PossessedTank) { return; }
+
+		// Subscribe our local method to the tank's death event
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	ControlledTank->DetachFromControllerPendingDestroy();
 }

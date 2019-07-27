@@ -21,6 +21,10 @@ class BATTLEMAGE_API ATankAIController : public AAIController
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
 
+		virtual void SetPawn(APawn* InPawn) override;
+		UFUNCTION()
+		void OnTankDeath();
+
 		// How close tank gets to target, before halting
 		float AcceptanceRadius = 2500;
 

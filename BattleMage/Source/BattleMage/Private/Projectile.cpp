@@ -9,6 +9,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Classes/PhysicsEngine/RadialForceComponent.h"
 #include "TimerManager.h"
+#include "Classes/Kismet/GameplayStatics.h"
 
 #include "CoreMinimal.h"
 
@@ -60,9 +61,10 @@ void AProjectile::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImp
 	// Impact explosion effect begins, trail effect ends
 	ImpactBlast->Activate();
 	LaunchBlast->Deactivate();
-	// Explosion force is applied around the impact
+	// Explosion is applied around the impact
+	UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
 	ExplosionForce->FireImpulse();
-	// Projectile is "destroyed"
+	// Projectile is "destroyed", while particle effects remain
 	CollisionMesh->SetVisibility(false);
 	CollisionMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
